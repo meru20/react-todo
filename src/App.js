@@ -1,24 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
+import { useState } from 'react';
+import './App.css';
+import ToDo from './ToDo';
+import ToDoList from './ToDoList';
+
+const App = () => {
+  const[toDos, setToDos]= useState([]);
+  const [alert,setAlert]=useState(false);;
+  const save = (value) => {
+    setToDos([...toDos,value]);
+    showAlert();
+
+  }
+  const deleteTodo = (i) => {
+    if( window.confirm('Are you sure you want to delete it?')){
+      const newToDo = toDos.filter((_, index) => index !== i)
+      setToDos(newToDo)
+    }
+    
+  }
+  const showAlert = () => {
+    setAlert(true);
+   setTimeout(() => {
+     setAlert(false);
+   },2000);
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div className='container'>
+       {alert ? (
+        <div className='row'>
+          <div className='col-6 offset-3'>
+            <div class='alert alert-success text-center' role='alert'>
+              You've successfully added your todo!
+            </div>
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
+          
+        <ToDo save={save} />
+        <ToDoList toDos={toDos} deleteTodo={deleteTodo}/> 
+        </div>
+      
   );
 }
 
